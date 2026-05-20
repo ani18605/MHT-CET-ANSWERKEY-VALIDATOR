@@ -150,8 +150,24 @@
                     </div>
                 </div>
 
-                <!-- Primary Metrics Row -->
-                <div class="grid-3col metric-grid">
+                <!-- Navigation Tabs -->
+                <div class="dashboard-tabs glass-card">
+                    <button class="tab-btn active" data-tab="analytics">
+                        <i class="fa-solid fa-chart-line"></i> Performance Dashboard
+                    </button>
+                    <button class="tab-btn" data-tab="mistakes">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Mistakes Review Zone <span id="mistake-tab-badge" class="tab-badge">0</span>
+                    </button>
+                    <button class="tab-btn" data-tab="full-sheet">
+                        <i class="fa-solid fa-clipboard-list"></i> Full Answer Key
+                    </button>
+                </div>
+
+                <!-- 2a. PERFORMANCE DASHBOARD TAB CONTENT -->
+                <div id="analytics-area" class="dashboard-tab-content">
+                    
+                    <!-- Primary Metrics Row -->
+                    <div class="grid-3col metric-grid">
                     
                     <!-- Overall Score Card -->
                     <div class="card glass-card main-score-card">
@@ -282,9 +298,10 @@
                         </div>
                     </div>
                 </div>
+                </div> <!-- End of #analytics-area -->
 
-                <!-- Mistake Analyzer Section -->
-                <div id="mistake-analyzer-area" class="card glass-card mistake-analyzer-card">
+                <!-- Mistake Analyzer Section (Tab Content) -->
+                <div id="mistake-analyzer-area" class="card glass-card mistake-analyzer-card dashboard-tab-content hidden">
                     <div class="mistake-header">
                         <h2>
                             <i class="fa-solid fa-circle-exclamation danger-text"></i> 
@@ -306,8 +323,8 @@
                     </div>
                 </div>
 
-                <!-- 3. DETAILED SHEET ANALYSIS -->
-                <div id="detailed-sheet-area" class="card glass-card detailed-sheet-card">
+                <!-- 3. DETAILED SHEET ANALYSIS (Tab Content) -->
+                <div id="detailed-sheet-area" class="card glass-card detailed-sheet-card dashboard-tab-content hidden">
                     <div class="sheet-header">
                         <h2><i class="fa-solid fa-clipboard-list accent-text"></i> Question-by-Question Analysis</h2>
                         <div class="sheet-actions">

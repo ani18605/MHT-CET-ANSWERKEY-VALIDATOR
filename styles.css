@@ -1909,6 +1909,111 @@ kbd {
         font-size: 15px;
     }
 }
+
+/* --- 13b. DASHBOARD NAVIGATION TABS --- */
+.dashboard-tabs {
+    display: flex;
+    padding: 6px;
+    gap: 8px;
+    margin-top: 10px;
+    margin-bottom: 24px;
+    border-radius: var(--border-radius-md);
+    background: rgba(13, 20, 38, 0.45);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 10;
+}
+
+[data-theme="light"] .dashboard-tabs {
+    background: rgba(255, 255, 255, 0.6);
+}
+
+.tab-btn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: transparent;
+    border: none;
+    border-radius: var(--border-radius-sm);
+    color: var(--text-secondary);
+    font-family: var(--font-heading);
+    font-weight: 600;
+    font-size: 14.5px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn i {
+    font-size: 15px;
+    transition: transform 0.2s ease;
+}
+
+.tab-btn:hover {
+    color: var(--text-primary);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.tab-btn:hover i {
+    transform: scale(1.1);
+}
+
+[data-theme="light"] .tab-btn:hover {
+    background: rgba(0, 0, 0, 0.02);
+}
+
+.tab-btn.active {
+    color: white !important;
+    background: linear-gradient(135deg, var(--accent-color) 0%, var(--accent-light) 100%);
+    box-shadow: 0 4px 15px rgba(var(--accent-color-rgb), 0.25);
+}
+
+.tab-badge {
+    background: rgba(255, 255, 255, 0.15);
+    color: var(--text-primary);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.25s ease;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+[data-theme="light"] .tab-badge {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.tab-btn.active .tab-badge {
+    background: white;
+    color: var(--accent-color);
+    border-color: white;
+}
+
+/* Hidden helper class for tab content */
+.dashboard-tab-content.hidden {
+    display: none !important;
+}
+
+/* Mobile responsive tabs */
+@media (max-width: 768px) {
+    .dashboard-tabs {
+        flex-direction: column;
+        padding: 8px;
+        gap: 6px;
+    }
+    .tab-btn {
+        padding: 10px;
+        font-size: 13.5px;
+        justify-content: flex-start;
+    }
+}
+
 /* --- 14. PRINT LAYOUT OVERRIDES --- */
 @media print {
     body {
@@ -1941,11 +2046,16 @@ kbd {
     }
 
     /* Mistakes only print overrides */
-    body.print-mistakes-only .app-container > *:not(#dashboard-section) {
+    body.print-mistakes-only .main-header,
+    body.print-mistakes-only #upload-section,
+    body.print-mistakes-only #detailed-sheet-area,
+    body.print-mistakes-only .dashboard-tabs,
+    body.print-mistakes-only #analytics-area,
+    body.print-mistakes-only .main-footer {
         display: none !important;
     }
-    body.print-mistakes-only #dashboard-section > *:not(#mistake-analyzer-area) {
-        display: none !important;
+    body.print-mistakes-only #dashboard-section {
+        display: block !important;
     }
     body.print-mistakes-only #mistake-analyzer-area {
         display: block !important;
