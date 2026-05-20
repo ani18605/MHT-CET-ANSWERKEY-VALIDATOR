@@ -658,19 +658,6 @@ kbd {
     color: var(--text-primary);
 }
 
-.score-feedback {
-    font-family: var(--font-heading);
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--gold-color);
-    text-align: center;
-    background: rgba(var(--gold-color-rgb), 0.08);
-    border: 1px solid rgba(var(--gold-color-rgb), 0.15);
-    padding: 6px 16px;
-    border-radius: 30px;
-    margin-top: 4px;
-}
-
 /* Subject Breakdown cards stack */
 .subject-breakdown-container {
     display: flex;
@@ -1442,11 +1429,6 @@ kbd {
 
     .gauge-center-text {
         font-size: 18px;
-    }
-
-    .score-feedback {
-        font-size: 14px;
-        padding: 4px 12px;
     }
 
     /* Chart Containers scaling */
