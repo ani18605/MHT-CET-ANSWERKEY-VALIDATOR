@@ -112,6 +112,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // --- 3c. CHROME MOBILE DOWNLOAD GUIDE SCREENSHOT TOGGLE ---
+    const toggleChromeGuide = document.getElementById('toggle-chrome-guide');
+    const chromeGuideContainer = document.getElementById('chrome-guide-container');
+    if (toggleChromeGuide && chromeGuideContainer) {
+        toggleChromeGuide.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const isHidden = chromeGuideContainer.classList.toggle('hidden');
+            if (isHidden) {
+                toggleChromeGuide.innerHTML = `<i class="fa-solid fa-image"></i> View Screenshot Guide`;
+            } else {
+                toggleChromeGuide.innerHTML = `<i class="fa-solid fa-image-slash"></i> Hide Screenshot Guide`;
+            }
+        });
+    }
+
     // --- 4. FILE UPLOAD & DROP HANDLERS ---
     
     // Click browse triggers hidden input
@@ -228,16 +243,67 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
         
+        // 1. Programmatically expand the mistakes accordion to make elements active in layout
+        if (mistakeCollapsibleBody) {
+            mistakeCollapsibleBody.classList.remove('collapsed');
+        }
+        if (mistakeChevron) {
+            mistakeChevron.classList.add('rotated');
+        }
+        
+        // 2. Enable print-mistakes mode
         document.body.classList.add('print-mistakes-only');
+        
+        let safetyTimeoutId = null;
         
         const cleanUpPrint = () => {
             document.body.classList.remove('print-mistakes-only');
+            if (safetyTimeoutId) {
+                clearTimeout(safetyTimeoutId);
+                safetyTimeoutId = null;
+            }
         };
+        
         window.addEventListener('afterprint', cleanUpPrint, { once: true });
         
-        window.print();
-        
-        setTimeout(cleanUpPrint, 1000);
+        // 3. Collect all images in the mistakes zone
+        const mistakesContainer = document.getElementById('mistakes-container');
+        const images = Array.from(mistakesContainer.querySelectorAll('img'));
+        const incompleteImages = images.filter(img => !img.complete);
+
+        const triggerPrint = () => {
+            // Defer slightly to ensure the browser has completed layout reflow and image decoding passes
+            setTimeout(() => {
+                window.print();
+                // Set a highly conservative safety fallback (e.g. 5 minutes) starting AFTER the print dialog is triggered
+                safetyTimeoutId = setTimeout(cleanUpPrint, 300000);
+            }, 250);
+        };
+
+        if (incompleteImages.length > 0) {
+            // Inform user that images are loading for the printout
+            showToast(`Loading ${incompleteImages.length} question images for PDF...`, "info");
+            
+            let loadedCount = 0;
+            const onImageLoad = () => {
+                loadedCount++;
+                if (loadedCount === incompleteImages.length) {
+                    triggerPrint();
+                }
+            };
+            
+            incompleteImages.forEach(img => {
+                if (img.complete) {
+                    onImageLoad();
+                } else {
+                    img.addEventListener('load', onImageLoad, { once: true });
+                    img.addEventListener('error', onImageLoad, { once: true }); // proceed even if some fail
+                }
+            });
+        } else {
+            // Images are already loaded/cached, print immediately!
+            triggerPrint();
+        }
     });
 
     // --- 5. CORE PARSING ENGINE ---
