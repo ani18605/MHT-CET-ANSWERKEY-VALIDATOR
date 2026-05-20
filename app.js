@@ -542,6 +542,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // 6. Draw Table
         totalCountEl.textContent = appState.questions.length;
         filterAndRenderTable();
+
+        // 7. Render Mistakes Analyzer Zone
+        renderMistakesZone();
     }
 
     // --- 7. SVG DYNAMIC CHARTS ENGINE ---
@@ -786,6 +789,87 @@ document.addEventListener('DOMContentLoaded', () => {
     function setupTableEventListeners() {
         // Copy Question ID to clipboard
         document.querySelectorAll('.copy-id-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const id = btn.getAttribute('data-id');
+                navigator.clipboard.writeText(id).then(() => {
+                    showToast(`Copied Question ID: ${id}`, "info");
+                    
+                    // Momentarily change icon
+                    const icon = btn.querySelector('i');
+                    icon.className = 'fa-solid fa-check';
+                    icon.style.color = 'var(--success-color)';
+                    setTimeout(() => {
+                        icon.className = 'fa-regular fa-copy';
+                        icon.style.color = '';
+                    }, 1200);
+                });
+            });
+        });
+    }
+
+    function renderMistakesZone() {
+        const mistakesContainer = document.getElementById('mistakes-container');
+        const mistakeBadgeCount = document.getElementById('mistake-badge-count');
+        const wrongQuestions = appState.questions.filter(q => q.status === "Incorrect");
+
+        mistakeBadgeCount.textContent = `${wrongQuestions.length} Mistakes`;
+        
+        if (wrongQuestions.length > 0) {
+            // Reset custom success styles on the badge
+            mistakeBadgeCount.style.background = "";
+            mistakeBadgeCount.style.color = "";
+            mistakeBadgeCount.style.borderColor = "";
+            
+            mistakesContainer.innerHTML = wrongQuestions.map(q => {
+                const subPrefix = q.subject === "Physics" ? "phy" : q.subject === "Chemistry" ? "chem" : "math";
+                const icon = q.subject === "Physics" ? "fa-atom" : q.subject === "Chemistry" ? "fa-flask-vial" : "fa-calculator";
+                return `
+                    <div class="mistake-card ${subPrefix}-card">
+                        <div class="mistake-card-top">
+                            <span class="mistake-card-subj ${subPrefix}">
+                                <i class="fa-solid ${icon}"></i> ${q.subject}
+                            </span>
+                            <span class="mistake-card-id copy-mistake-id" data-id="${q.id}" title="Click to copy Question ID">
+                                ID: ${q.id} <i class="fa-regular fa-copy"></i>
+                            </span>
+                        </div>
+                        <div class="mistake-card-body">
+                            <div class="mistake-val-block">
+                                <span class="mistake-val-lbl">Your Choice</span>
+                                <span class="mistake-val-opt wrong">
+                                    <i class="fa-solid fa-circle-xmark"></i> ${q.candidateResponse || 'N/A'}
+                                </span>
+                            </div>
+                            <div class="mistake-val-block">
+                                <span class="mistake-val-lbl">Correct Key</span>
+                                <span class="mistake-val-opt correct">
+                                    <i class="fa-solid fa-circle-check"></i> ${q.correctOption}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            setupMistakeCardEventListeners();
+        } else {
+            // Style badge as success
+            mistakeBadgeCount.style.background = "rgba(16, 185, 129, 0.15)";
+            mistakeBadgeCount.style.color = "var(--success-color)";
+            mistakeBadgeCount.style.borderColor = "rgba(16, 185, 129, 0.3)";
+            
+            mistakesContainer.innerHTML = `
+                <div class="mistakes-empty-state">
+                    <div class="mistakes-empty-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <p><strong>0 mistakes found!</strong> Excellent job, you got every attempted question correct!</p>
+                </div>
+            `;
+        }
+    }
+
+    function setupMistakeCardEventListeners() {
+        document.querySelectorAll('.copy-mistake-id').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
                 const id = btn.getAttribute('data-id');

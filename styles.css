@@ -1528,6 +1528,232 @@ kbd {
     }
 }
 
+/* --- MISTAKE REVIEW ZONE STYLES --- */
+.mistake-analyzer-card {
+    padding: 24px;
+    margin-bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.mistake-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.mistake-header h2 {
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mistake-badge-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: var(--danger-color);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.mistake-sub {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.mistakes-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    max-height: 480px;
+    overflow-y: auto;
+    padding-right: 6px;
+    margin-top: 8px;
+}
+
+.mistakes-container::-webkit-scrollbar {
+    width: 6px;
+}
+.mistakes-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+.mistakes-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+.mistakes-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.mistake-card {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.mistake-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.04);
+    box-shadow: 0 8px 20px -8px rgba(0, 0, 0, 0.3);
+}
+
+.mistake-card.phy-card {
+    border-left: 4px solid var(--phy-color);
+}
+.mistake-card.chem-card {
+    border-left: 4px solid var(--chem-color);
+}
+.mistake-card.math-card {
+    border-left: 4px solid var(--math-color);
+}
+
+.mistake-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mistake-card-subj {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: 12px;
+}
+
+.mistake-card-subj.phy {
+    background: rgba(6, 182, 212, 0.1);
+    color: var(--phy-color);
+}
+.mistake-card-subj.chem {
+    background: rgba(236, 72, 153, 0.1);
+    color: var(--chem-color);
+}
+.mistake-card-subj.math {
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--math-color);
+}
+
+.mistake-card-id {
+    font-family: var(--font-heading);
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.mistake-card-id:hover {
+    color: var(--text-primary);
+}
+
+.mistake-card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.02);
+}
+
+.mistake-val-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+}
+
+.mistake-val-lbl {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+}
+
+.mistake-val-opt {
+    font-size: 18px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.mistake-val-opt.wrong {
+    color: var(--danger-color);
+}
+
+.mistake-val-opt.correct {
+    color: var(--success-color);
+}
+
+.mistake-val-opt i {
+    font-size: 14px;
+}
+
+.mistakes-empty-state {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    text-align: center;
+    gap: 12px;
+    background: rgba(255, 255, 255, 0.01);
+    border: 1px dashed rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
+.mistakes-empty-icon {
+    font-size: 32px;
+    color: var(--success-color);
+    text-shadow: 0 0 15px rgba(16, 185, 129, 0.3);
+}
+
+.mistakes-empty-state p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0;
+}
+
+@media (max-width: 600px) {
+    .mistake-analyzer-card {
+        padding: 16px;
+    }
+    .mistake-header h2 {
+        font-size: 18px;
+    }
+    .mistakes-container {
+        grid-template-columns: 1fr;
+        max-height: 380px;
+    }
+}
+
 /* --- 14. PRINT LAYOUT OVERRIDES --- */
 @media print {
     body {
