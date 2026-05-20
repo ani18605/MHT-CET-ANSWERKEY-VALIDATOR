@@ -37,20 +37,99 @@ window.MHTCET_DEMO = (function() {
                     }
                 }
 
-                // Append row matching the MHTCET HTML structure
+                // Generate simulated option IDs (like 9010011, 9010012, 9010013, 9010014)
+                const optIds = [
+                    questionId * 10 + 1,
+                    questionId * 10 + 2,
+                    questionId * 10 + 3,
+                    questionId * 10 + 4
+                ];
+                const correctOptId = optIds[correctOption - 1];
+                const candidateResponseId = candidateResponse === "--" ? "--" : optIds[parseInt(candidateResponse) - 1];
+
+                // Generate highly detailed simulated MHT-CET question text and options
+                let mockQuestionText = "";
+                let mockOptionTexts = [];
+                if (subj.name === "Physics") {
+                    mockQuestionText = `A uniform sphere of mass 10 kg and radius 0.5 m is rotating about its diameter. A constant tangential force is applied. If it gains an angular velocity of 12 rad/s in 4 seconds, find the magnitude of the applied force. [Simulated Question ID: ${questionId}]`;
+                    mockOptionTexts = ["1.5 N", "3.0 N", "4.5 N", "6.0 N"];
+                } else if (subj.name === "Chemistry") {
+                    mockQuestionText = `Identify the major organic product formed in the acid-catalyzed hydration of 3-methylbut-1-ene, and select the correct option representing the intermediate stability. [Simulated Question ID: ${questionId}]`;
+                    mockOptionTexts = ["2-methylbutan-2-ol", "3-methylbutan-2-ol", "3-methylbutan-1-ol", "2-methylbutan-1-ol"];
+                } else {
+                    mockQuestionText = `If the line y = mx + c is a common tangent to the circle x² + y² = 25 and the parabola y² = 16x, then find the value of its y-intercept constant c. [Simulated Question ID: ${questionId}]`;
+                    mockOptionTexts = ["± 5√(1 + m²)", "± 4 / m", "± 5 / m", "± 4√(1 + m²)"];
+                }
+
+                // Append row matching the real MHTCET HTML structure
                 htmlRows += `
                 <tr>
-                    <td style="width:10%; text-align:center; font-weight:bold;">${questionId}</td>
-                    <td style="width:20%;">${subj.name}</td>
-                    <td>
-                        <table class="center" style="width:100%; border-collapse:collapse;">
+                    <td style="width:10%">${questionId}</td>
+                    <td>${subj.name}</td>
+                    <td style="width:60%">
+                        <div>
+                            <div class="Box">
+                                <br/>
+                                <p style="font-weight: 600; font-size: 13.5px; line-height: 1.5; color: var(--text-primary); margin-bottom: 12px;">
+                                    ${mockQuestionText}
+                                </p>
+                            </div>
+                        </div>
+                        <table width="100%">
                             <tbody>
                                 <tr>
-                                    <td style="width:50%; padding: 4px;">Correct Option: <span style="font-weight:bold; color:#10b981;">${correctOption}</span></td>
-                                    <td style="width:50%; padding: 4px;">Chosen Option: <span style="font-weight:bold;">${candidateResponse}</span></td>
+                                    <td class="BoxOption">
+                                        <div class="BoxNumber" style="float:left">${optIds[0]}</div>
+                                        <div class="BoxOp" style="float:right">${mockOptionTexts[0]}</div>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
+                        <table width="100%">
+                            <tbody>
+                                <tr>
+                                    <td class="BoxOption">
+                                        <div class="BoxNumber" style="float:left">${optIds[1]}</div>
+                                        <div class="BoxOp" style="float:right">${mockOptionTexts[1]}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table width="100%">
+                            <tbody>
+                                <tr>
+                                    <td class="BoxOption">
+                                        <div class="BoxNumber" style="float:left">${optIds[2]}</div>
+                                        <div class="BoxOp" style="float:right">${mockOptionTexts[2]}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table width="100%">
+                            <tbody>
+                                <tr>
+                                    <td class="BoxOption">
+                                        <div class="BoxNumber" style="float:left">${optIds[3]}</div>
+                                        <div class="BoxOp" style="float:right">${mockOptionTexts[3]}</div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <br/>
+                        <table class="table table-responsive table-bordered center" width="100%">
+                            <tbody>
+                                <tr>
+                                    <td>Correct Option: <span>${correctOptId}</span></td>
+                                    <td>Candidate Response: <span>${candidateResponseId}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td style="width:20%">
+                        <div class="form-group btn-func" style="text-align:center">
+                            <span id="${questionId}" style="color:green" title="Objection raised"></span>
+                            <button class="btn btn-primary btn-sm" id="RaiseObj" type="button">Raise / View Objection</button>
+                        </div>
                     </td>
                 </tr>`;
             }

@@ -42,6 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetBtn = document.getElementById('reset-btn');
     const themeToggle = document.getElementById('theme-toggle');
     const printBtn = document.getElementById('print-btn');
+    const printMistakesBtn = document.getElementById('print-mistakes-btn');
     
     const uploadSection = document.getElementById('upload-section');
     const dashboardSection = document.getElementById('dashboard-section');
@@ -200,6 +201,26 @@ document.addEventListener('DOMContentLoaded', () => {
         window.print();
     });
 
+    // Export Mistakes PDF Action
+    printMistakesBtn.addEventListener('click', () => {
+        const wrongQuestions = appState.questions.filter(q => q.status === "Incorrect");
+        if (wrongQuestions.length === 0) {
+            showToast("No mistakes to export! Perfect score!", "success");
+            return;
+        }
+        
+        document.body.classList.add('print-mistakes-only');
+        
+        const cleanUpPrint = () => {
+            document.body.classList.remove('print-mistakes-only');
+        };
+        window.addEventListener('afterprint', cleanUpPrint, { once: true });
+        
+        window.print();
+        
+        setTimeout(cleanUpPrint, 1000);
+    });
+
     // --- 5. CORE PARSING ENGINE ---
     
     function handleFile(file) {
@@ -333,6 +354,48 @@ document.addEventListener('DOMContentLoaded', () => {
                                     status = "Unattempted";
                                 }
 
+                                // Extract the question HTML body (from tds[2] which represents Column 3: Question Content)
+                                let questionHtml = "";
+                                if (tds.length >= 3) {
+                                    const questionTd = tds[2];
+                                    const questionTdClone = questionTd.cloneNode(true);
+                                    
+                                    // Remove the bottom summary answers table (which has class 'center' or class 'table-bordered')
+                                    const summaryTable = questionTdClone.querySelector('table.center, table.table-bordered');
+                                    if (summaryTable) {
+                                        summaryTable.remove();
+                                    }
+                                    
+                                    // Highlight correct and wrong options inside the question content
+                                    const optionsTds = questionTdClone.querySelectorAll('.BoxOption');
+                                    optionsTds.forEach(optTd => {
+                                        const boxNumEl = optTd.querySelector('.BoxNumber');
+                                        if (boxNumEl) {
+                                            const optionId = boxNumEl.textContent.trim();
+                                            if (optionId === correctOption) {
+                                                optTd.classList.add('opt-correct');
+                                                if (!optTd.querySelector('.badge-opt-correct')) {
+                                                    boxNumEl.insertAdjacentHTML('beforeend', ` <span class="badge-opt badge-opt-correct"><i class="fa-solid fa-check"></i> Correct Key</span>`);
+                                                }
+                                            }
+                                            if (candidateResponse && candidateResponse !== '--' && optionId === candidateResponse) {
+                                                if (candidateResponse !== correctOption) {
+                                                    optTd.classList.add('opt-incorrect');
+                                                    if (!optTd.querySelector('.badge-opt-incorrect')) {
+                                                        boxNumEl.insertAdjacentHTML('beforeend', ` <span class="badge-opt badge-opt-incorrect"><i class="fa-solid fa-xmark"></i> Your Choice</span>`);
+                                                    }
+                                                } else {
+                                                    if (!optTd.querySelector('.badge-opt-yourchoice')) {
+                                                        boxNumEl.insertAdjacentHTML('beforeend', ` <span class="badge-opt badge-opt-yourchoice"><i class="fa-solid fa-user-check"></i> Correct & Marked</span>`);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    });
+                                    
+                                    questionHtml = questionTdClone.innerHTML.trim();
+                                }
+
                                 appState.questions.push({
                                     id: questionId,
                                     index: appState.questions.length + 1,
@@ -341,7 +404,8 @@ document.addEventListener('DOMContentLoaded', () => {
                                     candidateResponse,
                                     status,
                                     marks: awardedMarks,
-                                    maxMarks: questionMarks
+                                    maxMarks: questionMarks,
+                                    questionHtml
                                 });
                             }
                         }
@@ -816,6 +880,9 @@ document.addEventListener('DOMContentLoaded', () => {
         mistakeBadgeCount.textContent = `${wrongQuestions.length} Mistakes`;
         
         if (wrongQuestions.length > 0) {
+            // Show mistake print button
+            printMistakesBtn.style.display = 'inline-flex';
+            
             // Reset custom success styles on the badge
             mistakeBadgeCount.style.background = "";
             mistakeBadgeCount.style.color = "";
@@ -824,6 +891,17 @@ document.addEventListener('DOMContentLoaded', () => {
             mistakesContainer.innerHTML = wrongQuestions.map(q => {
                 const subPrefix = q.subject === "Physics" ? "phy" : q.subject === "Chemistry" ? "chem" : "math";
                 const icon = q.subject === "Physics" ? "fa-atom" : q.subject === "Chemistry" ? "fa-flask-vial" : "fa-calculator";
+                
+                const questionBodyHtml = q.questionHtml ? `
+                    <div class="mistake-question-content">
+                        ${q.questionHtml}
+                    </div>
+                ` : `
+                    <div class="mistakes-no-content">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Question content not available in uploaded sheet.
+                    </div>
+                `;
+
                 return `
                     <div class="mistake-card ${subPrefix}-card">
                         <div class="mistake-card-top">
@@ -834,6 +912,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 ID: ${q.id} <i class="fa-regular fa-copy"></i>
                             </span>
                         </div>
+                        
+                        <div class="mistake-card-content-area">
+                            ${questionBodyHtml}
+                        </div>
+                        
                         <div class="mistake-card-body">
                             <div class="mistake-val-block">
                                 <span class="mistake-val-lbl">Your Choice</span>
@@ -854,6 +937,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             setupMistakeCardEventListeners();
         } else {
+            // Hide mistake print button
+            printMistakesBtn.style.display = 'none';
+            
             // Style badge as success
             mistakeBadgeCount.style.background = "rgba(16, 185, 129, 0.15)";
             mistakeBadgeCount.style.color = "var(--success-color)";
