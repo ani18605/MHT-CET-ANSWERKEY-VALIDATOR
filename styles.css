@@ -617,10 +617,18 @@ kbd {
     position: relative;
     width: 120px;
     height: 120px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .progress-ring {
+    display: block;
+    width: 120px;
+    height: 120px;
     transform: rotate(-90deg);
+    transform-origin: center;
 }
 
 .progress-ring-fill {
@@ -628,6 +636,15 @@ kbd {
     stroke-dashoffset: 314.16;
     transition: stroke-dashoffset 1.5s cubic-bezier(0.1, 0.9, 0.2, 1);
     stroke-linecap: round;
+}
+
+.progress-ring-bg {
+    stroke: rgba(255, 255, 255, 0.08);
+    transition: stroke 0.3s ease;
+}
+
+[data-theme="light"] .progress-ring-bg {
+    stroke: rgba(0, 0, 0, 0.06);
 }
 
 .gauge-center-text {

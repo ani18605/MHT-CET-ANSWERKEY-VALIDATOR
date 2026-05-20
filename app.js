@@ -500,25 +500,30 @@ document.addEventListener('DOMContentLoaded', () => {
         // Set gold/blue color dynamically depending on score tier
         let scoreFeedback = "Keep practicing!";
         let feedbackColor = "var(--text-secondary)";
+        let feedbackColorRgb = "148, 163, 184"; // var(--text-secondary)
         if (score >= 160) {
             scoreFeedback = "Outstanding! Rank ≤ 100 (Est)";
             feedbackColor = "var(--gold-color)";
+            feedbackColorRgb = "var(--gold-color-rgb)";
             triggerHighPerformanceCelebration();
         } else if (score >= 140) {
             scoreFeedback = "Excellent! COEP / VJTI Tier (Est)";
             feedbackColor = "var(--success-color)";
+            feedbackColorRgb = "16, 185, 129"; // success color (emerald)
             triggerHighPerformanceCelebration();
         } else if (score >= 110) {
             scoreFeedback = "Very Good! Tier 1 College Candidate";
             feedbackColor = "var(--phy-color)";
+            feedbackColorRgb = "var(--phy-color-rgb)";
         } else if (score >= 80) {
             scoreFeedback = "Good job! Strong core qualifications";
             feedbackColor = "var(--info-color)";
+            feedbackColorRgb = "59, 130, 246"; // info color
         }
         scoreFeedbackEl.textContent = scoreFeedback;
         scoreFeedbackEl.style.color = feedbackColor;
-        scoreFeedbackEl.style.borderColor = feedbackColor.replace(")", ", 0.2)");
-        scoreFeedbackEl.style.backgroundColor = feedbackColor.replace(")", ", 0.08)");
+        scoreFeedbackEl.style.borderColor = `rgba(${feedbackColorRgb}, 0.2)`;
+        scoreFeedbackEl.style.backgroundColor = `rgba(${feedbackColorRgb}, 0.08)`;
 
         // 3. Render Subject Cards
         const subjs = ["Physics", "Chemistry", "Mathematics"];
