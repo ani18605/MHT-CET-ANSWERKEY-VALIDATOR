@@ -150,181 +150,124 @@
                     </div>
                 </div>
 
-                <!-- Navigation Tabs -->
-                <div class="dashboard-tabs glass-card">
-                    <button class="tab-btn active" data-tab="analytics">
-                        <i class="fa-solid fa-chart-line"></i> Performance Dashboard
-                    </button>
-                    <button class="tab-btn" data-tab="mistakes">
-                        <i class="fa-solid fa-triangle-exclamation"></i> Mistakes Review Zone <span id="mistake-tab-badge" class="tab-badge">0</span>
-                    </button>
-                    <button class="tab-btn" data-tab="full-sheet">
-                        <i class="fa-solid fa-clipboard-list"></i> Full Answer Key
-                    </button>
-                </div>
-
-                <!-- 2a. PERFORMANCE DASHBOARD TAB CONTENT -->
-                <div id="analytics-area" class="dashboard-tab-content">
-                    
+                <!-- 2a. PERFORMANCE DASHBOARD SECTION -->
+                <div id="analytics-area">
                     <!-- Primary Metrics Row -->
                     <div class="grid-3col metric-grid">
-                    
-                    <!-- Overall Score Card -->
-                    <div class="card glass-card main-score-card">
-                        <div class="card-glow"></div>
-                        <div class="score-card-content">
-                            <div class="score-label">Overall Marks</div>
-                            <div class="score-display">
-                                <span id="overall-score" class="big-score">0</span>
-                                <span class="max-score">/ 200</span>
+                        <!-- Overall Score Card -->
+                        <div class="card glass-card main-score-card">
+                            <div class="card-glow"></div>
+                            <div class="score-card-content">
+                                <div class="score-label">Overall Marks</div>
+                                <div class="score-display">
+                                    <span id="overall-score" class="big-score">0</span>
+                                    <span class="max-score">/ 200</span>
+                                </div>
+                                <div class="circular-progress-container">
+                                    <svg class="progress-ring">
+                                        <circle class="progress-ring-bg" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                                        <circle id="score-ring" class="progress-ring-fill" stroke="var(--gold-color)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                                    </svg>
+                                    <span id="gauge-percent" class="gauge-center-text">0%</span>
+                                </div>
                             </div>
-                            
-                            <!-- Custom SVG Circular Gauge -->
-                            <div class="circular-progress-container">
-                                <svg class="progress-ring" width="120" height="120" viewBox="0 0 120 120">
-                                    <circle class="progress-ring-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
-                                    <circle id="score-ring" class="progress-ring-fill" stroke="var(--gold-color)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                        </div>
+
+                        <!-- Subject Breakdown Cards -->
+                        <div class="subject-breakdown-container">
+                            <div class="card glass-card subject-card physics-card">
+                                <div class="subject-header">
+                                    <h3><i class="fa-solid fa-atom"></i> Physics</h3>
+                                    <span id="phy-score" class="stat-val">0 / 50</span>
+                                </div>
+                                <div class="subject-progress-bar">
+                                    <div id="phy-progress" class="subject-progress-fill" style="width: 0%"></div>
+                                </div>
+                                <div class="subject-accuracy" id="phy-accuracy">Accuracy: 0%</div>
+                            </div>
+
+                            <div class="card glass-card subject-card chemistry-card">
+                                <div class="subject-header">
+                                    <h3><i class="fa-solid fa-flask-vial"></i> Chemistry</h3>
+                                    <span id="chem-score" class="stat-val">0 / 50</span>
+                                </div>
+                                <div class="subject-progress-bar">
+                                    <div id="chem-progress" class="subject-progress-fill" style="width: 0%"></div>
+                                </div>
+                                <div class="subject-accuracy" id="chem-accuracy">Accuracy: 0%</div>
+                            </div>
+
+                            <div class="card glass-card subject-card maths-card">
+                                <div class="subject-header">
+                                    <h3><i class="fa-solid fa-calculator"></i> Mathematics</h3>
+                                    <span id="math-score" class="stat-val">0 / 100</span>
+                                </div>
+                                <div class="subject-progress-bar">
+                                    <div id="math-progress" class="subject-progress-fill" style="width: 0%"></div>
+                                </div>
+                                <div class="subject-accuracy" id="math-accuracy">Accuracy: 0%</div>
+                            </div>
+                        </div>
+
+                        <!-- Evaluation Analytics Overview Card -->
+                        <div class="card glass-card stats-overview-card">
+                            <div class="card-glow"></div>
+                            <h2>Evaluation Metrics</h2>
+                            <ul class="stats-list-vertical">
+                                <li>
+                                    <span class="stat-lbl"><i class="fa-solid fa-list-check info-text"></i> Total Questions</span>
+                                    <span id="stat-total" class="stat-val">0</span>
+                                </li>
+                                <li>
+                                    <span class="stat-lbl"><i class="fa-solid fa-user-pen info-text"></i> Attempted Ratio</span>
+                                    <span id="stat-attempted" class="stat-val">0</span>
+                                </li>
+                                <li>
+                                    <span class="stat-lbl"><i class="fa-solid fa-circle-check success-text"></i> Correct Answers</span>
+                                    <span id="stat-correct" class="stat-val">0</span>
+                                </li>
+                                <li>
+                                    <span class="stat-lbl"><i class="fa-solid fa-circle-xmark danger-text"></i> Incorrect Answers</span>
+                                    <span id="stat-wrong" class="stat-val">0</span>
+                                </li>
+                                <li>
+                                    <span class="stat-lbl"><i class="fa-solid fa-circle-question info-text"></i> Unattempted</span>
+                                    <span id="stat-unattempted" class="stat-val">0</span>
+                                </li>
+                                <li class="accuracy-row">
+                                    <span class="stat-lbl"><i class="fa-solid fa-bullseye accent-text"></i> Global Accuracy</span>
+                                    <span id="stat-accuracy" class="stat-val">0%</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Visual Charts Section -->
+                    <div class="grid-2col charts-grid">
+                        <!-- Score Comparison Chart -->
+                        <div class="card glass-card chart-card">
+                            <h2>Subject Score Comparison</h2>
+                            <div class="chart-container">
+                                <svg id="score-comparison-chart" viewBox="0 0 500 280" preserveAspectRatio="xMidYMid meet">
+                                    <!-- Dynamic bars will be injected here by app.js -->
                                 </svg>
-                                <div id="gauge-percent" class="gauge-center-text">0%</div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Subject Breakdown Cards -->
-                    <div class="subject-breakdown-container">
-                        
-                        <!-- Physics -->
-                        <div class="card glass-card subject-card physics-card">
-                            <div class="subject-header">
-                                <h3><i class="fa-solid fa-atom"></i> Physics</h3>
-                                <span id="phy-score-badge" class="badge">0 / 50</span>
+                        <!-- Accuracy Radar / Pie alternative (Dynamic SVG) -->
+                        <div class="card glass-card chart-card">
+                            <h2>Section Accuracy Rate</h2>
+                            <div class="chart-container">
+                                <svg id="accuracy-pie-chart" viewBox="0 0 500 280" preserveAspectRatio="xMidYMid meet">
+                                    <!-- Dynamic graphics will be injected here by app.js -->
+                                </svg>
                             </div>
-                            <div class="subject-stats">
-                                <span>Correct: <strong id="phy-correct">0</strong></span>
-                                <span>Wrong: <strong id="phy-wrong">0</strong></span>
-                            </div>
-                            <div class="subject-progress-bar">
-                                <div id="phy-progress" class="subject-progress-fill" style="width: 0%;"></div>
-                            </div>
-                            <div class="subject-accuracy">Accuracy: <span id="phy-accuracy">0%</span></div>
-                        </div>
-
-                        <!-- Chemistry -->
-                        <div class="card glass-card subject-card chemistry-card">
-                            <div class="subject-header">
-                                <h3><i class="fa-solid fa-flask-vial"></i> Chemistry</h3>
-                                <span id="chem-score-badge" class="badge">0 / 50</span>
-                            </div>
-                            <div class="subject-stats">
-                                <span>Correct: <strong id="chem-correct">0</strong></span>
-                                <span>Wrong: <strong id="chem-wrong">0</strong></span>
-                            </div>
-                            <div class="subject-progress-bar">
-                                <div id="chem-progress" class="subject-progress-fill" style="width: 0%;"></div>
-                            </div>
-                            <div class="subject-accuracy">Accuracy: <span id="chem-accuracy">0%</span></div>
-                        </div>
-
-                        <!-- Mathematics -->
-                        <div class="card glass-card subject-card maths-card">
-                            <div class="subject-header">
-                                <h3><i class="fa-solid fa-calculator"></i> Mathematics</h3>
-                                <span id="math-score-badge" class="badge">0 / 100</span>
-                            </div>
-                            <div class="subject-stats">
-                                <span>Correct: <strong id="math-correct">0</strong></span>
-                                <span>Wrong: <strong id="math-wrong">0</strong></span>
-                            </div>
-                            <div class="subject-progress-bar">
-                                <div id="math-progress" class="subject-progress-fill" style="width: 0%;"></div>
-                            </div>
-                            <div class="subject-accuracy">Accuracy: <span id="math-accuracy">0%</span></div>
-                        </div>
-
-                    </div>
-
-                    <!-- Statistics Dashboard Card -->
-                    <div class="card glass-card stats-overview-card">
-                        <h2>Evaluation Analytics</h2>
-                        <ul class="stats-list-vertical">
-                            <li>
-                                <span class="stat-lbl"><i class="fa-solid fa-list-check"></i> Total Questions</span>
-                                <span id="stat-total" class="stat-val">150</span>
-                            </li>
-                            <li>
-                                <span class="stat-lbl"><i class="fa-solid fa-square-poll-horizontal"></i> Attempted</span>
-                                <span id="stat-attempted" class="stat-val">0 (0%)</span>
-                            </li>
-                            <li>
-                                <span class="stat-lbl"><i class="fa-solid fa-circle-check success-text"></i> Correct Answers</span>
-                                <span id="stat-correct" class="stat-val">0</span>
-                            </li>
-                            <li>
-                                <span class="stat-lbl"><i class="fa-solid fa-circle-xmark danger-text"></i> Wrong Answers</span>
-                                <span id="stat-wrong" class="stat-val">0</span>
-                            </li>
-                            <li>
-                                <span class="stat-lbl"><i class="fa-solid fa-circle-question info-text"></i> Unattempted</span>
-                                <span id="stat-unattempted" class="stat-val">0</span>
-                            </li>
-                            <li class="accuracy-row">
-                                <span class="stat-lbl"><i class="fa-solid fa-bullseye accent-text"></i> Global Accuracy</span>
-                                <span id="stat-accuracy" class="stat-val">0%</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Visual Charts Section -->
-                <div class="grid-2col charts-grid">
-                    
-                    <!-- Score Comparison Chart -->
-                    <div class="card glass-card chart-card">
-                        <h2>Subject Score Comparison</h2>
-                        <div class="chart-container">
-                            <svg id="score-comparison-chart" viewBox="0 0 500 280" preserveAspectRatio="xMidYMid meet">
-                                <!-- Dynamic bars will be injected here by app.js -->
-                            </svg>
-                        </div>
-                    </div>
-
-                    <!-- Accuracy Radar / Pie alternative (Dynamic SVG) -->
-                    <div class="card glass-card chart-card">
-                        <h2>Section Accuracy Rate</h2>
-                        <div class="chart-container">
-                            <svg id="accuracy-pie-chart" viewBox="0 0 500 280" preserveAspectRatio="xMidYMid meet">
-                                <!-- Dynamic graphics will be injected here by app.js -->
-                            </svg>
                         </div>
                     </div>
                 </div>
-                </div> <!-- End of #analytics-area -->
 
-                <!-- Mistake Analyzer Section (Tab Content) -->
-                <div id="mistake-analyzer-area" class="card glass-card mistake-analyzer-card dashboard-tab-content hidden">
-                    <div class="mistake-header">
-                        <h2>
-                            <i class="fa-solid fa-circle-exclamation danger-text"></i> 
-                            Mistakes Review Zone
-                        </h2>
-                        <div class="mistake-actions">
-                            <span id="mistake-badge-count" class="badge-danger mistake-badge-danger">0 Mistakes</span>
-                            <button id="print-mistakes-btn" class="btn btn-danger btn-sm" style="display: none;">
-                                <i class="fa-solid fa-file-pdf"></i> Export Mistakes PDF
-                            </button>
-                        </div>
-                    </div>
-                    <p class="mistake-sub">
-                        Review the questions you answered incorrectly. Check your response against the correct answer key to analyze and learn from your errors.
-                    </p>
-                    
-                    <div id="mistakes-container" class="mistakes-container">
-                        <!-- Dynamic cards will be injected here by app.js -->
-                    </div>
-                </div>
-
-                <!-- 3. DETAILED SHEET ANALYSIS (Tab Content) -->
-                <div id="detailed-sheet-area" class="card glass-card detailed-sheet-card dashboard-tab-content hidden">
+                <!-- 3. DETAILED SHEET ANALYSIS (Full Answer Key) -->
+                <div id="detailed-sheet-area" class="card glass-card detailed-sheet-card">
                     <div class="sheet-header">
                         <h2><i class="fa-solid fa-clipboard-list accent-text"></i> Question-by-Question Analysis</h2>
                         <div class="sheet-actions">
@@ -381,6 +324,31 @@
                                 <!-- Dynamic rows will be injected here by app.js -->
                             </tbody>
                         </table>
+                    </div>
+                </div>
+
+                <!-- 4. MISTAKES REVIEW ZONE (Collapsible Accordion) -->
+                <div id="mistake-analyzer-area" class="card glass-card mistake-analyzer-card collapsible-card">
+                    <div id="mistake-toggle-header" class="mistake-header clickable-header">
+                        <h2>
+                            <i class="fa-solid fa-circle-exclamation danger-text"></i> 
+                            Mistakes Review Zone
+                            <i class="fa-solid fa-chevron-down mistake-chevron"></i>
+                        </h2>
+                        <div class="mistake-actions" onclick="event.stopPropagation();">
+                            <span id="mistake-badge-count" class="badge-danger mistake-badge-danger">0 Mistakes</span>
+                            <button id="print-mistakes-btn" class="btn btn-danger btn-sm" style="display: none;">
+                                <i class="fa-solid fa-file-pdf"></i> Export Mistakes PDF
+                            </button>
+                        </div>
+                    </div>
+                    <div id="mistake-collapsible-body" class="collapsible-body collapsed">
+                        <p class="mistake-sub">
+                            Review the questions you answered incorrectly. Check your response against the correct answer key to analyze and learn from your errors.
+                        </p>
+                        <div id="mistakes-container" class="mistakes-container">
+                            <!-- Dynamic cards will be injected here by app.js -->
+                        </div>
                     </div>
                 </div>
             </section>

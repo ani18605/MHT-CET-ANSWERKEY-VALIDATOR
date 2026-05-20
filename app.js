@@ -73,10 +73,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalCountEl = document.getElementById('total-count');
     const tableBody = document.getElementById('table-body');
 
-    // Tab Selectors
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.dashboard-tab-content');
-    const mistakeTabBadge = document.getElementById('mistake-tab-badge');
+    // Collapsible Mistakes Accordion Selectors
+    const mistakeToggleHeader = document.getElementById('mistake-toggle-header');
+    const mistakeCollapsibleBody = document.getElementById('mistake-collapsible-body');
+    const mistakeChevron = document.querySelector('.mistake-chevron');
 
     // --- 3. THEME TOGGLING ---
     themeToggle.addEventListener('click', () => {
@@ -102,28 +102,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- 3b. DASHBOARD NAVIGATION TABS ---
-    tabButtons.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const targetTab = btn.getAttribute('data-tab');
-            
-            // Toggle active tab button
-            tabButtons.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            
-            // Toggle tab contents
-            tabContents.forEach(content => {
-                content.classList.add('hidden');
-            });
-            
-            if (targetTab === 'analytics') {
-                document.getElementById('analytics-area').classList.remove('hidden');
-            } else if (targetTab === 'mistakes') {
-                document.getElementById('mistake-analyzer-area').classList.remove('hidden');
-            } else if (targetTab === 'full-sheet') {
-                document.getElementById('detailed-sheet-area').classList.remove('hidden');
-            }
-        });
+    // --- 3b. MISTAKES COLLAPSIBLE ACCORDION ---
+    mistakeToggleHeader.addEventListener('click', () => {
+        const isCollapsed = mistakeCollapsibleBody.classList.toggle('collapsed');
+        if (isCollapsed) {
+            mistakeChevron.classList.remove('rotated');
+        } else {
+            mistakeChevron.classList.add('rotated');
+        }
     });
 
     // --- 4. FILE UPLOAD & DROP HANDLERS ---
@@ -216,11 +202,9 @@ document.addEventListener('DOMContentLoaded', () => {
         appState.filters.status = "all";
         appState.filters.search = "";
         
-        // Reset tabs to default active
-        tabButtons.forEach(b => b.classList.remove('active'));
-        const defaultTabBtn = document.querySelector('.tab-btn[data-tab="analytics"]');
-        if (defaultTabBtn) defaultTabBtn.classList.add('active');
-        tabContents.forEach(c => c.classList.add('hidden'));
+        // Reset collapsible mistakes accordion to collapsed by default
+        mistakeCollapsibleBody.classList.add('collapsed');
+        mistakeChevron.classList.remove('rotated');
 
         // Animate screen change
         dashboardSection.classList.add('hidden');
@@ -575,16 +559,9 @@ document.addEventListener('DOMContentLoaded', () => {
         dashboardSection.classList.remove('hidden');
         resetBtn.classList.remove('hidden');
 
-        // Reset tabs to default active (Analytics) on new page load
-        tabButtons.forEach(b => b.classList.remove('active'));
-        const defaultTabBtn = document.querySelector('.tab-btn[data-tab="analytics"]');
-        if (defaultTabBtn) defaultTabBtn.classList.add('active');
-        
-        tabContents.forEach(c => {
-            c.classList.add('hidden');
-        });
-        const analyticsArea = document.getElementById('analytics-area');
-        if (analyticsArea) analyticsArea.classList.remove('hidden');
+        // Reset collapsible mistakes accordion to collapsed by default on load
+        mistakeCollapsibleBody.classList.add('collapsed');
+        mistakeChevron.classList.remove('rotated');
 
         // 1. Set Candidate Headers
         candNameEl.textContent = appState.candidate.name;
@@ -924,11 +901,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const wrongQuestions = appState.questions.filter(q => q.status === "Incorrect");
 
         mistakeBadgeCount.textContent = `${wrongQuestions.length} Mistakes`;
-        
-        // Update the tab badge too
-        if (mistakeTabBadge) {
-            mistakeTabBadge.textContent = wrongQuestions.length;
-        }
         
         if (wrongQuestions.length > 0) {
             // Show mistake print button
