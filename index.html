@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MHT-CET Score Calculator & Premium Dashboard</title>
+    
+    <!-- Meta tags for SEO -->
+    <meta name="description" content="Calculate your MHT-CET score instantly from your response sheet. Features highly detailed subject-wise analysis, private offline parsing, and interactive charts.">
+    <meta name="keywords" content="mhtcet, mhtcet score calculator, cet response sheet, cet answer key, cet analysis, maharashtra cet cell">
+    
+    <!-- Google Fonts: Outfit (For Headings) and Inter (For UI/Body) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome / Lucide icons (using SVG inline or standard CDN) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="app" class="app-container">
+        
+        <!-- Header -->
+        <header class="main-header glass-card">
+            <div class="logo-area">
+                <div class="logo-icon">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>MHT-CET <span class="accent-text">Analyzer</span></h1>
+                    <p class="subtitle">Score Calculator & Performance Dashboard</p>
+                </div>
+            </div>
+            
+            <div class="header-actions">
+                <span class="privacy-badge">
+                    <i class="fa-solid fa-shield-halved"></i> 100% Private (Local Parsing)
+                </span>
+                <button id="theme-toggle" class="icon-btn" aria-label="Toggle Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+                <button id="reset-btn" class="btn btn-danger hidden">
+                    <i class="fa-solid fa-rotate-left"></i> Reset
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+
+            <!-- 1. UPLOAD SECTION (Initial State) -->
+            <section id="upload-section" class="upload-wrapper fade-in">
+                <div class="grid-2col">
+                    
+                    <!-- File drop zone card -->
+                    <div class="card glass-card upload-card text-center">
+                        <div class="card-glow"></div>
+                        <div id="drop-zone" class="drop-zone">
+                            <input type="file" id="file-input" class="hidden" accept=".mht,.html">
+                            
+                            <div class="upload-icon-container">
+                                <i class="fa-solid fa-cloud-arrow-up cloud-icon"></i>
+                            </div>
+                            
+                            <h2>Upload Your Response Sheet</h2>
+                            <p class="upload-desc">Drag and drop your <strong>.mht</strong> or <strong>.html</strong> answer key file here, or click to browse.</p>
+                            
+                            <button id="browse-btn" class="btn btn-primary">
+                                <i class="fa-solid fa-folder-open"></i> Browse Files
+                            </button>
+                        </div>
+                        
+                        <div class="demo-separator">
+                            <span>or</span>
+                        </div>
+                        
+                        <div class="demo-action-area">
+                            <p>Don't have your file ready? Try it with mock data!</p>
+                            <button id="demo-btn" class="btn btn-secondary">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Try Demo Mode
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Instructions / FAQ Card -->
+                    <div class="card glass-card instruction-card">
+                        <h2><i class="fa-solid fa-cloud-arrow-down accent-text"></i> How to Download Your Response Sheet?</h2>
+                        <ol class="steps-list">
+                            <li>
+                                <div class="step-num">1</div>
+                                <div class="step-content">
+                                    <h3>Log in to MHT-CET Portal</h3>
+                                    <p>Go to the official CET Cell website (cetcell.mahacet.org) and sign in using your registration details.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="step-num">2</div>
+                                <div class="step-content">
+                                    <h3>Open Objection Tracker</h3>
+                                    <p>Navigate to "Objection Tracker" or "Candidate Response Sheet" link for MHT-CET 2026 and click to view your response sheet.</p>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="step-num">3</div>
+                                <div class="step-content">
+                                    <h3>Download & Save the File</h3>
+                                    <p><strong>On Desktop (Chrome/Edge):</strong> Press <kbd>Ctrl + S</kbd> (Windows) or <kbd>Cmd + S</kbd> (Mac). Choose <strong>"Webpage, Single File (*.mht)"</strong> or <strong>"HTML Only"</strong> and save it.</p>
+                                    <p class="mt-xs"><strong>On Mobile:</strong> Tap the browser's three-dot menu, select <strong>"Share"</strong> &rarr; <strong>"Print"</strong> &rarr; <strong>"Save as PDF"</strong>, or choose <strong>"Download Page"</strong> to save the file. Once downloaded, upload it here!</p>
+                                </div>
+                            </li>
+                        </ol>
+                        
+                        <div class="privacy-alert">
+                            <i class="fa-solid fa-circle-check privacy-icon"></i>
+                            <div>
+                                <h4>Your Privacy is Fully Protected!</h4>
+                                <p>We process everything locally inside your browser. No files or candidate information are sent to our servers. Complete offline evaluation.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. DASHBOARD SECTION (Visible after upload/demo) -->
+            <section id="dashboard-section" class="dashboard-wrapper hidden fade-in">
+                
+                <!-- Candidate Info Header Card -->
+                <div class="card glass-card candidate-info-card">
+                    <div class="candidate-header-grid">
+                        <div class="info-item">
+                            <span class="info-label">Candidate Name</span>
+                            <span id="cand-name" class="info-value">Loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Roll Number</span>
+                            <span id="cand-roll" class="info-value">Loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Exam Date</span>
+                            <span id="cand-date" class="info-value">Loading...</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status</span>
+                            <span class="info-value"><span class="badge badge-success">Evaluated</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Primary Metrics Row -->
+                <div class="grid-3col metric-grid">
+                    
+                    <!-- Overall Score Card -->
+                    <div class="card glass-card main-score-card">
+                        <div class="card-glow"></div>
+                        <div class="score-card-content">
+                            <div class="score-label">Overall Marks</div>
+                            <div class="score-display">
+                                <span id="overall-score" class="big-score">0</span>
+                                <span class="max-score">/ 200</span>
+                            </div>
+                            
+                            <!-- Custom SVG Circular Gauge -->
+                            <div class="circular-progress-container">
+                                <svg class="progress-ring" width="120" height="120">
+                                    <circle class="progress-ring-bg" stroke="rgba(255,255,255,0.05)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                                    <circle id="score-ring" class="progress-ring-fill" stroke="var(--gold-color)" stroke-width="8" fill="transparent" r="50" cx="60" cy="60"/>
+                                </svg>
+                                <div id="gauge-percent" class="gauge-center-text">0%</div>
+                            </div>
+                            
+                            <div id="score-feedback" class="score-feedback">Calculating...</div>
+                        </div>
+                    </div>
+
+                    <!-- Subject Breakdown Cards -->
+                    <div class="subject-breakdown-container">
+                        
+                        <!-- Physics -->
+                        <div class="card glass-card subject-card physics-card">
+                            <div class="subject-header">
+                                <h3><i class="fa-solid fa-atom"></i> Physics</h3>
+                                <span id="phy-score-badge" class="badge">0 / 50</span>
+                            </div>
+                            <div class="subject-stats">
+                                <span>Correct: <strong id="phy-correct">0</strong></span>
+                                <span>Wrong: <strong id="phy-wrong">0</strong></span>
+                            </div>
+                            <div class="subject-progress-bar">
+                                <div id="phy-progress" class="subject-progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <div class="subject-accuracy">Accuracy: <span id="phy-accuracy">0%</span></div>
+                        </div>
+
+                        <!-- Chemistry -->
+                        <div class="card glass-card subject-card chemistry-card">
+                            <div class="subject-header">
+                                <h3><i class="fa-solid fa-flask-vial"></i> Chemistry</h3>
+                                <span id="chem-score-badge" class="badge">0 / 50</span>
+                            </div>
+                            <div class="subject-stats">
+                                <span>Correct: <strong id="chem-correct">0</strong></span>
+                                <span>Wrong: <strong id="chem-wrong">0</strong></span>
+                            </div>
+                            <div class="subject-progress-bar">
+                                <div id="chem-progress" class="subject-progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <div class="subject-accuracy">Accuracy: <span id="chem-accuracy">0%</span></div>
+                        </div>
+
+                        <!-- Mathematics -->
+                        <div class="card glass-card subject-card maths-card">
+                            <div class="subject-header">
+                                <h3><i class="fa-solid fa-calculator"></i> Mathematics</h3>
+                                <span id="math-score-badge" class="badge">0 / 100</span>
+                            </div>
+                            <div class="subject-stats">
+                                <span>Correct: <strong id="math-correct">0</strong></span>
+                                <span>Wrong: <strong id="math-wrong">0</strong></span>
+                            </div>
+                            <div class="subject-progress-bar">
+                                <div id="math-progress" class="subject-progress-fill" style="width: 0%;"></div>
+                            </div>
+                            <div class="subject-accuracy">Accuracy: <span id="math-accuracy">0%</span></div>
+                        </div>
+
+                    </div>
+
+                    <!-- Statistics Dashboard Card -->
+                    <div class="card glass-card stats-overview-card">
+                        <h2>Evaluation Analytics</h2>
+                        <ul class="stats-list-vertical">
+                            <li>
+                                <span class="stat-lbl"><i class="fa-solid fa-list-check"></i> Total Questions</span>
+                                <span id="stat-total" class="stat-val">150</span>
+                            </li>
+                            <li>
+                                <span class="stat-lbl"><i class="fa-solid fa-square-poll-horizontal"></i> Attempted</span>
+                                <span id="stat-attempted" class="stat-val">0 (0%)</span>
+                            </li>
+                            <li>
+                                <span class="stat-lbl"><i class="fa-solid fa-circle-check success-text"></i> Correct Answers</span>
+                                <span id="stat-correct" class="stat-val">0</span>
+                            </li>
+                            <li>
+                                <span class="stat-lbl"><i class="fa-solid fa-circle-xmark danger-text"></i> Wrong Answers</span>
+                                <span id="stat-wrong" class="stat-val">0</span>
+                            </li>
+                            <li>
+                                <span class="stat-lbl"><i class="fa-solid fa-circle-question info-text"></i> Unattempted</span>
+                                <span id="stat-unattempted" class="stat-val">0</span>
+                            </li>
+                            <li class="accuracy-row">
+                                <span class="stat-lbl"><i class="fa-solid fa-bullseye accent-text"></i> Global Accuracy</span>
+                                <span id="stat-accuracy" class="stat-val">0%</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Visual Charts Section -->
+                <div class="grid-2col charts-grid">
+                    
+                    <!-- Score Comparison Chart -->
+                    <div class="card glass-card chart-card">
+                        <h2>Subject Score Comparison</h2>
+                        <div class="chart-container">
+                            <svg id="score-comparison-chart" viewBox="0 0 500 280" preserveAspectRatio="xMidYMid meet">
+                                <!-- Dynamic bars will be injected here by app.js -->
+                            </svg>
+                        </div>
+                    </div>
+
+                    <!-- Accuracy Radar / Pie alternative (Dynamic SVG) -->
+                    <div class="card glass-card chart-card">
+                        <h2>Section Accuracy Rate</h2>
+                        <div class="chart-container">
+                            <svg id="accuracy-pie-chart" viewBox="0 0 500 280" preserveAspectRatio="xMidYMid meet">
+                                <!-- Dynamic graphics will be injected here by app.js -->
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. DETAILED SHEET ANALYSIS -->
+                <div id="detailed-sheet-area" class="card glass-card detailed-sheet-card">
+                    <div class="sheet-header">
+                        <h2><i class="fa-solid fa-clipboard-list accent-text"></i> Question-by-Question Analysis</h2>
+                        <div class="sheet-actions">
+                            <button id="print-btn" class="btn btn-secondary btn-sm">
+                                <i class="fa-solid fa-print"></i> Print Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Search & Filter Controls -->
+                    <div class="filters-container">
+                        <div class="search-wrapper">
+                            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                            <input type="text" id="search-input" placeholder="Search by Question ID...">
+                        </div>
+                        
+                        <div class="filter-group">
+                            <span class="filter-lbl">Subject:</span>
+                            <div class="pill-group" id="subject-filters">
+                                <button class="pill active" data-subject="all">All</button>
+                                <button class="pill" data-subject="Physics">Physics</button>
+                                <button class="pill" data-subject="Chemistry">Chemistry</button>
+                                <button class="pill" data-subject="Mathematics">Mathematics</button>
+                            </div>
+                        </div>
+
+                        <div class="filter-group">
+                            <span class="filter-lbl">Status:</span>
+                            <div class="pill-group" id="status-filters">
+                                <button class="pill active" data-status="all">All</button>
+                                <button class="pill" data-status="Correct">Correct</button>
+                                <button class="pill" data-status="Incorrect">Incorrect</button>
+                                <button class="pill" data-status="Unattempted">Unattempted</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sheet-stats-summary">
+                        Showing <span id="filtered-count" class="accent-text">0</span> of <span id="total-count">0</span> Questions
+                    </div>
+
+                    <!-- Detailed Table List -->
+                    <div class="table-scroll-container">
+                        <table id="detailed-table" class="fancy-table">
+                            <thead>
+                                <tr>
+                                    <th>Question ID</th>
+                                    <th>Subject</th>
+                                    <th>Correct Option</th>
+                                    <th style="text-align: center;">Your Response</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-body">
+                                <!-- Dynamic rows will be injected here by app.js -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+    </div>
+
+    <!-- Canvas Confetti Library via CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    
+    <!-- Script Files -->
+    <script src="demo-data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
