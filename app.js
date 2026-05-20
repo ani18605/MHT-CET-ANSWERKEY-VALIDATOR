@@ -594,21 +594,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const cardPrefix = s === "Physics" ? "phy" : s === "Chemistry" ? "chem" : "math";
             const sData = appState.stats.sections[s] || { correct: 0, incorrect: 0, marks: 0, maxMarks: 0, total: 0 };
             
-            // Set Score Badge text
-            document.getElementById(`${cardPrefix}-score-badge`).textContent = `${sData.marks} / ${sData.maxMarks}`;
+            // Set Score text (ID in index.html is e.g. 'phy-score')
+            const scoreEl = document.getElementById(`${cardPrefix}-score`);
+            if (scoreEl) {
+                scoreEl.textContent = `${sData.marks} / ${sData.maxMarks}`;
+            }
             
-            // Set stats details
-            document.getElementById(`${cardPrefix}-correct`).textContent = sData.correct;
-            document.getElementById(`${cardPrefix}-wrong`).textContent = sData.incorrect;
+            // Progress Bar filling (ID in index.html is e.g. 'phy-progress')
+            const progressEl = document.getElementById(`${cardPrefix}-progress`);
+            if (progressEl) {
+                const subPercent = sData.maxMarks > 0 ? (sData.marks / sData.maxMarks) * 100 : 0;
+                progressEl.style.width = `${subPercent}%`;
+            }
             
-            // Progress Bar filling
-            const subPercent = sData.maxMarks > 0 ? (sData.marks / sData.maxMarks) * 100 : 0;
-            document.getElementById(`${cardPrefix}-progress`).style.width = `${subPercent}%`;
-            
-            // Subject Accuracy
-            const attempted = sData.correct + sData.incorrect;
-            const subAccuracy = attempted > 0 ? Math.round((sData.correct / attempted) * 100) : 0;
-            document.getElementById(`${cardPrefix}-accuracy`).textContent = `${subAccuracy}%`;
+            // Subject Accuracy (ID in index.html is e.g. 'phy-accuracy')
+            const accuracyEl = document.getElementById(`${cardPrefix}-accuracy`);
+            if (accuracyEl) {
+                const attempted = sData.correct + sData.incorrect;
+                const subAccuracy = attempted > 0 ? Math.round((sData.correct / attempted) * 100) : 0;
+                accuracyEl.textContent = `Accuracy: ${subAccuracy}%`;
+            }
         });
 
         // 4. Render Evaluation Analytics
